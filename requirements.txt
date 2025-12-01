@@ -1,1 +1,6 @@
 streamlit
+duckdb
+time
+pandas
+numpy
+plotly
