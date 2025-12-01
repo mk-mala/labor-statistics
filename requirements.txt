@@ -1,6 +1,2 @@
 streamlit
-duckdb
-time
-pandas
-numpy
-plotly
+duckdb>=1.4.2
