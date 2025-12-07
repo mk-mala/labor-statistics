@@ -20,7 +20,7 @@ df_industry = conn.execute("SELECT * FROM local_area_employment__industry").fetc
 
 with st.sidebar:
 
-    ls_states = list(set(df_labor_force['state'].sort_values(ascending=False)))
+    ls_states = list(sorted(set(df_labor_force['state'])))
     #ls_areas = list(set(df_labor_force['area'].sort_values(ascending=False)))
 
     option_state = st.selectbox(
@@ -28,7 +28,7 @@ with st.sidebar:
         ls_states
     )
 
-    ls_areas = list(set(df_labor_force[df_labor_force['state'] == option_state]['area'].sort_values(ascending=False)))
+    ls_areas = list(sorted(set(df_labor_force[df_labor_force['state'] == option_state]['area'])))
 
     option_area = st.selectbox(
         "Select an Area:",
