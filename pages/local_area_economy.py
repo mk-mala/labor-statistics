@@ -1,3 +1,4 @@
+# %%
 import streamlit as st
 import time
 import pandas as pd
@@ -5,7 +6,8 @@ import numpy as np
 import duckdb
 import plotly.express as px
 
-import utils.utilities as utilities
+#import utils.utilities as utilities
+from utils import utilities
 
 ##############################################################################
 # Datasets
@@ -13,6 +15,14 @@ import utils.utilities as utilities
 conn = duckdb.connect('data/labor_statistics.db')
 
 df_labor_force = conn.execute("SELECT * FROM local_area_employment__labor_force").fetchdf()
+
+df_labor_force = df_labor_force.sort_values(by=['state', 'area', 'date'])
+
+#df_labor_force['change_12m'] = df_labor_force['employment'] - df_labor_force['employment'].shift(12)
+
+#df_labor_force["change_12m"] = df_labor_force.groupby(['state', 'area'])["employment"].apply(lambda x: x - x.shift(12))
+
+#%%
 df_industry = conn.execute("SELECT * FROM local_area_employment__industry").fetchdf()
 
 ##############################################################################
@@ -129,6 +139,23 @@ with st.container(border=True):
         )
 
         st.plotly_chart(fig_unemployment_rate)
+
+##############################################################################
+# Deltas
+
+col1, col2 = st.columns(2)
+
+with col1.container(border=True):
+
+    fig_change_12m = utilities.create_line_chart_change_12m(df_labor_force)
+
+    st.plotly_chart(fig_change_12m)
+
+with col2.container(border=True):
+
+    fig_yoy_bar_chart = utilities.create_bar_chart_yoy(df_labor_force)
+
+    st.plotly_chart(fig_yoy_bar_chart)
 
 ##############################################################################
 # Industry
